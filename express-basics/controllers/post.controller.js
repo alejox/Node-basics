@@ -1,8 +1,17 @@
-const getAllPosts = (req, res) => {
-  res.status(200).json({
-    status: "success",
-    posts,
-  });
+const { Post } = require('../models/post.model');
+
+//Model
+
+const getAllPosts = async (req, res) => {
+  try {
+    const posts = await Post.findAll();
+    res.status(200).json({
+      status: "success",
+      posts,
+    });
+  } catch (error) {
+    console.log(error);
+  }
 };
 
 const createPost = (req, res) => {
@@ -20,4 +29,4 @@ const createPost = (req, res) => {
   });
 }
 
-module.exports = {getAllPosts, createPost}
+module.exports = { getAllPosts, createPost }
