@@ -18,8 +18,12 @@ app.use('/users', usersRouter); //next(error)
 app.use('/posts', postsRouter);
 
 //Global error handler
-app.use('*', (err, req, res, next)=>{
-  console.log(err);
+app.use('*', (err, req, res, next) => {
+  res.status(500).json({
+    status: 'fail',
+    message:'...',
+    error: err,
+  });
 });
 
 
