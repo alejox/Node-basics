@@ -19,10 +19,11 @@ app.use('/posts', postsRouter);
 
 //Global error handler
 app.use('*', (err, req, res, next) => {
-  res.status(500).json({
+  res.status(err.statusCode).json({
     status: 'fail',
-    message:'...',
+    message:'err.message',
     error: err,
+    stack:err.stack
   });
 });
 

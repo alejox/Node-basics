@@ -1,4 +1,6 @@
-const { body, validationResult } = require('express-validator');
+const { body, validationResult } = require("express-validator");
+
+const { AppError } = require("../utils/appError.util");
 
 const checkResult = (req, res, next) => {
   const errors = validationResult(req);
@@ -8,21 +10,25 @@ const checkResult = (req, res, next) => {
   if (!errors.isEmpty()) {
     //Array has errors
 
-    const errosMsgs = errors.array().map(err => err.msg);
+    const errosMsgs = errors.array().map((err) => err.msg);
 
-    const message = errosMsgs.join('. ');
+    const message = errosMsgs.join(". ");
 
-    return res.status(400).json({ status: 'error', message });
+    return res.status(400).json({ status: "error", message });
   }
 
-  next();
+  return next(new AppError(message, 400));
 };
 
 const createUserValidators = [
-  body('name').notEmpty().withMessage('Name cannot be empty'),
-  body('age').isNumeric().withMessage('The age cannot be empty'),
-  body('email').isEmail().withMessage('The email cannot be empty'),
-  body('password').isLength({ min: 8 }).withMessage('Password must be at least 8 characters long').isAlphanumeric().withMessage('Password must contain ccletters and numbers'),
+  body("name").notEmpty().withMessage("Name cannot be empty"),
+  body("age").isNumeric().withMessage("The age cannot be empty"),
+  body("email").isEmail().withMessage("The email cannot be empty"),
+  body("password")
+    .isLength({ min: 8 })
+    .withMessage("Password must be at least 8 characters long")
+    .isAlphanumeric()
+    .withMessage("Password must contain ccletters and numbers"),
   checkResult,
 ];
 
