@@ -2,7 +2,10 @@
 const { User } = require("../models/user.model");
 
 //Utils
-const { catchAsync } = require('../utils/catchAsync.util')
+const { catchAsync } = require('../utils/catchAsync.util');
+
+//appError
+const { AppError } = ('../utils/appError.util.js');
 
 const getAllUsers = catchAsync(async (req, res, next) => {
 
@@ -37,13 +40,7 @@ const getUserbyId = catchAsync(async (req, res, next) => {
 
   const { id } = req.params;
 
-  const user = await User.findOne({ where: { id } });
-  if (!user) {
-    return req.status(404).json({
-      status: "error",
-      message: "User not found",
-    });
-  }
+
   res.status(200).json({
     status: "success",
     user,
@@ -57,27 +54,17 @@ const updateUser = catchAsync(async (req, res, next) => {
 
   const { id } = req.params;
   const { name } = req.body;
-
-  const user = await User.findOne({ where: { id } });
-
+  
   await user.update({ name });
 
-  res.status (204).json({ status: "success" });
+  res.status(204).json({ status: "success" });
 });
 
 const deleteUser = catchAsync(async (req, res, next) => {
 
   const { id } = req.params;
 
-  const user = await User.findOne({ where: { id } });
-  if (!user) {
-    return req.status(404).json({
-      status: "error",
-      message: "User not found",
-    });
-  }
 
-  //await user.destroy();
 
   await user.update({ status: 'deleted' });
   res.status(204).json({

@@ -14,7 +14,9 @@ const {
 
 const {
   createUserValidators,
-} = require('../middlewares/validator.middleware')
+} = require('../middlewares/validator.middleware');
+
+const { userExists } = require('../middlewares/users.middleware.js')
 
 
 //Models
@@ -24,12 +26,12 @@ const usersRouter = express.Router();
 
 usersRouter.get("/", getAllUsers);
 
-usersRouter.post("/",createUserValidators, createUser);
+usersRouter.post("/", createUserValidators, createUser);
 
-usersRouter.get("/:id", getUserbyId);
+usersRouter.get("/:id",userExists, getUserbyId);
 
-usersRouter.patch("/:id", updateUser); // next ();
+usersRouter.patch("/:id",userExists, updateUser); // next ();
 
-usersRouter.delete('/:id', deleteUser);
+usersRouter.delete('/:id',userExists, deleteUser);
 
 module.exports = { usersRouter }; 
